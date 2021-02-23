@@ -1,0 +1,35 @@
+#pickerContainer {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden scroll;
+    scrollbar-width: none;  /* Firefox */
+}
+#pickerContainer::-webkit-scrollbar {
+  display: none;
+}
+
+#pickerCenter {
+    position: absolute;
+    width: 95%;
+    margin: auto;
+    height: 100vh;
+    top: 10%;
+}
+
+#pickerCenter .MuiGrid-item {
+    cursor: pointer;
+}
+
+#pickerContainer img{
+    object-fit: contain;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+div[class$='_title'] span {
+    font-style: oblique;
+    color: #3f51b5;
+    font-weight: bolder;
+}

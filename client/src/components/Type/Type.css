@@ -1,0 +1,134 @@
+
+body {
+    background-color: #0f1419;
+    overflow: hidden;
+    /* padding-bottom: 150px; 
+    padding-right: 150px;  */
+}
+
+textarea {
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translate(-50%, 50%);
+    width: 1rem;
+    height: 1rem;
+    user-select: auto;
+    opacity: 0;
+    color: rgba(0, 0, 0, 0);
+    border: medium none;
+    outline: currentcolor none medium;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0% 0%;
+    z-index: -999;
+}
+
+#typeContainer {
+    position: relative;
+    /* width: 99rem; */
+    margin: auto;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#typeZone {
+    position: absolute;
+    direction: ltr;
+    overflow: hidden scroll;
+    max-height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 2.5px;
+    color: #828c99;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 16px;
+    font-weight: 200;
+    text-align: left;
+    letter-spacing: 1.2px;
+    white-space: pre-line;
+    cursor: grab;
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+#typeZone::-webkit-scrollbar {
+  display: none;
+}
+
+#typeZone ul {
+    width: 100%;
+    list-style: outside none none;
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 1.3em;
+    margin: 0;
+}
+
+#typeZone ul li {
+    float: left;
+    padding: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    display: flex;
+}
+
+#typeZone span {
+    float: left;
+    padding: 0;
+    margin: 0;
+    white-space: pre-wrap;
+    position: relative;
+}
+
+.comment {
+    color: #828c80;
+    font-style: italic;
+}
+
+.isPast {
+    /* color: rgb(98, 78, 187); */
+    color: #4CBF99;
+}
+.isWrong {
+    color: #ff3333;
+}
+
+.space, .enter {
+    border: 1px solid transparent;
+}
+.space.isWrong {
+    border-bottom: 1px solid #ff3333 !important;
+    animation: none;
+}
+
+.isNow .caret {
+    position: absolute !important;
+    /* border-left: 3px solid purple;
+    background: purple; */
+    border-left: 3px solid #E6B450;
+    background: #E6B450;
+    width: 0.1px;
+    display: inline-block;
+    height: 100%;
+    left: 0;
+	animation-name: blink;
+	animation-duration: 1500ms;
+    animation-iteration-count: infinite;
+    opacity: 1;
+}
+
+.isNow.space .caret {
+    height: 10%;
+    width: 100%;
+    bottom: 0;
+}
+.isNow.enter .caret {
+    height: 10%;
+    width: 100%;
+    bottom: 0;
+}
+
+@keyframes blink {
+	from { opacity : 1; }
+	to { opacity: 0; }
+}
