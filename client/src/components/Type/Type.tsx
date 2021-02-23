@@ -5,17 +5,24 @@ import { InfoDisplay } from './InfoDisplay';
 import { getRandomContentFromGit } from '../../usecases';
 import { contentToChunks } from '../../utils';
 import { GitFileInfo, LANGUAGES } from '../../interfaces';
+import * as ROUTES from '../../routes';
+import { useHistory } from 'react-router-dom';
 
 const verifyComment = (line: string) => {
   const leftTrimmed = line.trimLeft();
   return leftTrimmed.startsWith('*') || leftTrimmed.startsWith('/*') || leftTrimmed.startsWith('#') || leftTrimmed.startsWith('//');
 }
 
+const verifyImport = (line: string) => {
+  const leftTrimmed = line.trimLeft();
+  return leftTrimmed.startsWith('from') || leftTrimmed.startsWith('import') || leftTrimmed.startsWith('package') || leftTrimmed.startsWith('use');
+}
+
 const formatContent = (content: string): string[] => {
   let formatted: string[] = [];
   content.split('\n')
     .map((line) => line.trim())
-    .filter((line) => !verifyComment(line))
+    .filter((line) => !verifyComment(line) && !verifyImport(line))
     .forEach((line) => {
       formatted.push(...line.split(''));
       formatted.push('\n');
@@ -45,6 +52,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
   const spanList = React.useRef<Element[]>([]);
   const contentChunks = React.useRef<string[]>([]);
   const wrong = React.useRef<boolean>(false);
+  const history = useHistory();
 
   const loadContent = async () => {
     let content = '';
@@ -101,6 +109,12 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
         containerRef.current.click();
       }
     }
+    if (event.ctrlKey && event.key === 'Backspace') {
+    }
+    if (event.ctrlKey && event.shiftKey && event.key === 'Enter') {
+      history.push(ROUTES.ROOT);
+    }
+    //eslint-disable-next-line
   }, []);
 
   React.useEffect(() => {
@@ -203,7 +217,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     if (textAreaRef.current) {
       textAreaRef.current.focus();
 
-      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment)'));
+      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment):not(.import)'));
 
       if (spanList.current.length > 0) {
         if (wrong.current) {
@@ -233,6 +247,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
             const words = line.split(' ');
             let hasEncounterFirstWord = false;
             const isComment = verifyComment(line);
+            const isImport = verifyImport(line);
 
             return (
               <ul key={cIndex}>
@@ -250,7 +265,15 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
                         <li>
                           {
                             word.split('').map((character, chIndex) => (
-                              <span key={chIndex} className={isComment ? 'comment' : ''}>
+                              <span key={chIndex} className={
+                                isComment
+                                  ? 'comment'
+                                  : isImport
+                                  ? 'import'
+                                  : (word.match(/\s/))
+                                  ? 'space'
+                                  : ''
+                              }>
                                 <span className='caret'></span>
                                 {character}
                               </span>
@@ -260,6 +283,8 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
                         {
                           (isComment)
                             ? <span className='comment'>&nbsp;</span>
+                            : (isImport)
+                            ? <span className='import'>&nbsp;</span>
                             : (wIndex < words.length - 1)
                             ? <span className='space'>&nbsp;<span className='caret'></span></span>
                             : <span className='enter'> &#9166; <span className='caret'></span></span>

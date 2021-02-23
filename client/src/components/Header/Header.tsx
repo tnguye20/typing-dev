@@ -89,7 +89,7 @@ export const Header = () => {
           Object.keys(LANGUAGES).map((k: string, index) => {
             const language = k as keyof typeof LANGUAGES;
             return (
-              <ListItem button className="subItem" onClick={() => {
+              <ListItem button key={index} className="subItem" onClick={() => {
                 setOpen(false);
                 history.push(`${ROUTES.TYPING}/${language}`);
               }}>
