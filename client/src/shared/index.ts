@@ -30,7 +30,7 @@ const CODE_SAMPLE_MAP = {
     import "fmt"
 
     func main() {
-        fmt.Println("hello world")
+        fmt.Println("Hello World!")
     }
   `,
   'c++': `
