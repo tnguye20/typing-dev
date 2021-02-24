@@ -5,7 +5,8 @@ export interface GitRepository {
       avatar_url: string,
       login: string,
   },
-  html_url: string
+  html_url: string,
+  language?: keyof typeof LANGUAGES
 }
 
 export interface GitFile {

@@ -6,6 +6,8 @@ import {
   getFileContent,
   randomNumber
 } from "../../utils";
+import { DefaultContentDao } from "../../daos/DefaultContentDao";
+const { MAX_RANDOM_RECORDS } = config;
 
 const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'typescript', useDefaults: boolean = false) => {
   try {
@@ -20,23 +22,40 @@ const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'types
       path: file.path,
       owner: repo.owner,
       repo_name: repo.full_name,
-      content: content
+      content: content,
     }
+
+    // Cache this info the the DB without the content for legal reasons
+    const rn = randomNumber(0, MAX_RANDOM_RECORDS);
+    const dao = new DefaultContentDao(language);
+    const tmp = { ...info };
+    tmp.content = '';
+    await dao.addOne(tmp, rn.toString());
 
     return info;
   }
   catch (error) {
     console.log(error);
-    const { DEFAULT_PATHS } = config;
-    const rn = randomNumber(0, DEFAULT_PATHS[language].length - 1);
-    const randomDefault = DEFAULT_PATHS[language][rn];
+
+    // Reach into the database and get the cached entry
+    const rn = randomNumber(0, MAX_RANDOM_RECORDS);
+    const dao = new DefaultContentDao(language);
+    const randomDefault = await dao.getOne(rn.toString());
     const rs = await fetch(randomDefault.url);
-    // const rs = await fetch('http://localhost:3000/resources/javascript/1');
     const content = await rs.text()!;
     return {
       ...randomDefault,
       content
     };
+
+    // const item: GitFileInfo = {
+    //   content: '',
+    //   ...config.DEFAULT_PATHS[language][0]
+    // };
+    // for (let i = 0; i <= MAX_RANDOM_RECORDS; i++) {
+    //   await dao.addOne(item, i.toString());
+    // } 
+    // return item;
   }
 }
 
