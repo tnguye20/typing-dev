@@ -7,6 +7,7 @@ import { contentToChunks } from '../../utils';
 import { GitFileInfo, LANGUAGES } from '../../interfaces';
 import * as ROUTES from '../../routes';
 import { useHistory } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
 const verifyComment = (line: string) => {
   const leftTrimmed = line.trimLeft();
@@ -15,7 +16,7 @@ const verifyComment = (line: string) => {
 
 const verifyImport = (line: string) => {
   const leftTrimmed = line.trimLeft();
-  return leftTrimmed.startsWith('from') || leftTrimmed.startsWith('import') || leftTrimmed.startsWith('package') || leftTrimmed.startsWith('use');
+  return leftTrimmed.startsWith('using') || leftTrimmed.startsWith('"') || leftTrimmed.startsWith('from') || leftTrimmed.startsWith('import') || leftTrimmed.startsWith('package') || leftTrimmed.startsWith('use');
 }
 
 const formatContent = (content: string): string[] => {
@@ -63,7 +64,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     }
     else {
       if (process.env.NODE_ENV === 'development') {
-        rs = await getRandomContentFromGit(language);
+        rs = await getRandomContentFromGit(language, true);
       }
       else {
         rs = await getRandomContentFromGit(language);
@@ -217,7 +218,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     if (textAreaRef.current) {
       textAreaRef.current.focus();
 
-      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment):not(.import)'));
+      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment):not(.import):not(.indent)'));
 
       if (spanList.current.length > 0) {
         if (wrong.current) {
@@ -243,59 +244,68 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
       <textarea ref={textAreaRef} spellCheck={false} autoFocus onChange={handleOnChange} onKeyDown={handleType} disabled={characterArray.length === 0}></textarea>
       <code id='typeZone'>
         {
-          fileInfo.content.split('\n').map((line, cIndex) => {
-            const words = line.split(' ');
-            let hasEncounterFirstWord = false;
-            const isComment = verifyComment(line);
-            const isImport = verifyImport(line);
+          fileInfo.content.length > 0
+            ? (
+                fileInfo.content.split('\n').map((line, cIndex) => {
+                  const words = line.split(' ');
+                  let hasEncounterFirstWord = false;
+                  const isComment = verifyComment(line);
+                  const isImport = verifyImport(line);
 
-            return (
-              <ul key={cIndex}>
-                {
-                  words.map((word, wIndex) => {
-                    if (!hasEncounterFirstWord && word === '' && words.length > 1) {
-                      // This must be an indentation
-                      return (
-                        <li key={wIndex} className='indent'>&nbsp;</li>
-                      )
-                    }
-                    hasEncounterFirstWord = true;
-                    return (
-                      <React.Fragment key={wIndex}>
-                        <li>
-                          {
-                            word.split('').map((character, chIndex) => (
-                              <span key={chIndex} className={
-                                isComment
-                                  ? 'comment'
-                                  : isImport
-                                  ? 'import'
-                                  : (word.match(/\s/))
-                                  ? 'space'
-                                  : ''
-                              }>
-                                <span className='caret'></span>
-                                {character}
-                              </span>
-                            ))
+                  return (
+                    <ul key={cIndex}>
+                      {
+                        words.map((w, wIndex) => {
+                          const word = w.trimRight();
+                          if (!hasEncounterFirstWord && word.trim() === '' && words.length > 1) {
+                            // This must be an indentation
+                            return (
+                              <li key={wIndex} className='indent'>&nbsp;</li>
+                            )
                           }
-                        </li>
-                        {
-                          (isComment)
-                            ? <span className='comment'>&nbsp;</span>
-                            : (isImport)
-                            ? <span className='import'>&nbsp;</span>
-                            : (wIndex < words.length - 1)
-                            ? <span className='space'>&nbsp;<span className='caret'></span></span>
-                            : <span className='enter'> &#9166; <span className='caret'></span></span>
-                        }
-                      </React.Fragment>
-                    )
-                  })
-                }
-              </ul>
+                          hasEncounterFirstWord = true;
+                          return (
+                            <React.Fragment key={wIndex}>
+                              <li>
+                                {
+                                  word.split('').map((character, chIndex) => (
+                                    <span key={chIndex} className={
+                                      isComment
+                                        ? 'comment'
+                                        : isImport
+                                        ? 'import'
+                                        : (character.match(/\s/))
+                                        ? 'indent'
+                                        // : (word.match(/\s/))
+                                        // ? 'space'
+                                        : ''
+                                    }>
+                                      <span className='caret'></span>
+                                      {character}
+                                    </span>
+                                  ))
+                                }
+                              </li>
+                              {
+                                (isComment)
+                                  ? <span className='comment'>&nbsp;</span>
+                                  : (isImport)
+                                  ? <span className='import'>&nbsp;</span>
+                                  : (wIndex < words.length - 1)
+                                  ? <span className='space'>&nbsp;<span className='caret'></span></span>
+                                  : <span className='enter'> &#9166; <span className='caret'></span></span>
+                              }
+                            </React.Fragment>
+                          )
+                        })
+                      }
+                    </ul>
+                  )
+                })
             )
-          })
+              : (
+                <CircularProgress className='spinner'/>
+            )
         }
       </code>
 

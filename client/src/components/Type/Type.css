@@ -128,6 +128,10 @@ textarea {
     bottom: 0;
 }
 
+.spinner {
+    color: #E6B450 !important;
+}
+
 @keyframes blink {
 	from { opacity : 1; }
 	to { opacity: 0; }

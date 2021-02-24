@@ -5,7 +5,9 @@ const EXTENSION_MAP = {
   'html': 'html',
   'python': 'py',
   'php': 'php',
-  'rust': 'rs'
+  'rust': 'rs',
+  'go': 'go',
+  'c++': 'cpp',
 }
 const CODE_SAMPLE_MAP = {
   'typescript': `
@@ -23,10 +25,21 @@ const CODE_SAMPLE_MAP = {
       System.out.println("Hello World!");
     }
   `,
-  'html': `
-    <div>
-       <p>Hello World!</p>
-    </div>
+  'go': `
+    package main
+    import "fmt"
+
+    func main() {
+        fmt.Println("Hello World!")
+    }
+  `,
+  'c++': `
+    #include <iostream>
+
+    int main() {
+        std::cout << "Hello World!";
+        return 0;
+    }
   `,
   'python': `
     def func:
@@ -49,7 +62,7 @@ const config = {
   MAX_RANDOM_RECORDS: 100,
   CODE_SAMPLE_MAP,
   EXTENSION_MAP,
-  CHUNK: process.env.NODE_ENV === 'production' ? 11: 5,
+  CHUNK: process.env.NODE_ENV === 'production' ? 11: 20,
   DEFAULT_PATHS: {
     typescript: [
       {
@@ -171,9 +184,6 @@ const config = {
         path: 'model_search/utils.py'
       },
     ],
-    // html: [
-
-    // ],
     php: [
       {
         repo_name: 'laravel/framework',
@@ -184,6 +194,30 @@ const config = {
         },
         html_url: 'https://github.com/laravel/framework',
         path: '8.x/src/Illuminate/Auth/CreatesUserProviders.php'
+      },
+    ],
+    go: [
+      {
+        repo_name: 'mozilla-services/heka',
+        url: 'https://raw.githubusercontent.com/mozilla-services/heka/master/plugins/file/all_spec_test.go',
+        owner: {
+          avatar_url: 'https://avatars.githubusercontent.com/u/1066228?v=4',
+          login: 'mozilla-services'
+        },
+        html_url: 'https://github.com/mozilla-services/heka',
+        path: 'plugins/file/all_spec_test.go'
+      },
+    ],
+    'c++': [
+      {
+        repo_name: 'Sigil-Ebook/Sigil',
+        url: 'https://raw.githubusercontent.com/Sigil-Ebook/Sigil/master/src/sigil_constants.cpp',
+        owner: {
+          avatar_url: 'https://avatars.githubusercontent.com/u/12887734?v=4',
+          login: 'Sigil-Ebook'
+        },
+        html_url: 'https://github.com/laravel/framework',
+        path: 'src/sigil_constants.cpp'
       },
     ]
   }

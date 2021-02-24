@@ -26,8 +26,9 @@ export enum LANGUAGES {
   java = 'java',
   rust = 'rust',
   python = 'python',
-  // html = 'html',
-  php = 'php'
+  php = 'php',
+  go = 'go',
+  'c++' = 'c++'
 }
 
 export interface GitFileInfo {
