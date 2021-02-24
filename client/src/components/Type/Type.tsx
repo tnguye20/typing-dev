@@ -15,7 +15,7 @@ const verifyComment = (line: string) => {
 
 const verifyImport = (line: string) => {
   const leftTrimmed = line.trimLeft();
-  return leftTrimmed.startsWith('from') || leftTrimmed.startsWith('import') || leftTrimmed.startsWith('package') || leftTrimmed.startsWith('use');
+  return leftTrimmed.startsWith('"') || leftTrimmed.startsWith('from') || leftTrimmed.startsWith('import') || leftTrimmed.startsWith('package') || leftTrimmed.startsWith('use');
 }
 
 const formatContent = (content: string): string[] => {
@@ -63,7 +63,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     }
     else {
       if (process.env.NODE_ENV === 'development') {
-        rs = await getRandomContentFromGit(language);
+        rs = await getRandomContentFromGit(language, true);
       }
       else {
         rs = await getRandomContentFromGit(language);
@@ -217,7 +217,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     if (textAreaRef.current) {
       textAreaRef.current.focus();
 
-      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment):not(.import)'));
+      spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment):not(.import):not(.indent)'));
 
       if (spanList.current.length > 0) {
         if (wrong.current) {
@@ -253,7 +253,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
               <ul key={cIndex}>
                 {
                   words.map((word, wIndex) => {
-                    if (!hasEncounterFirstWord && word === '' && words.length > 1) {
+                    if (!hasEncounterFirstWord && word.trim() === '' && words.length > 1) {
                       // This must be an indentation
                       return (
                         <li key={wIndex} className='indent'>&nbsp;</li>
@@ -270,8 +270,10 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
                                   ? 'comment'
                                   : isImport
                                   ? 'import'
-                                  : (word.match(/\s/))
-                                  ? 'space'
+                                  : (chIndex === 0 && character.match(/\s/))
+                                  ? 'indent'
+                                  // : (word.match(/\s/))
+                                  // ? 'space'
                                   : ''
                               }>
                                 <span className='caret'></span>

@@ -7,7 +7,7 @@ import {
   randomNumber
 } from "../../utils";
 import { DefaultContentDao } from "../../daos/DefaultContentDao";
-const { MAX_RANDOM_RECORDS } = config;
+const { DEFAULT_PATHS, MAX_RANDOM_RECORDS } = config;
 
 const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'typescript', useDefaults: boolean = false) => {
   try {
@@ -35,7 +35,7 @@ const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'types
     return info;
   }
   catch (error) {
-    console.log(error);
+    // console.log(error);
 
     // Reach into the database and get the cached entry
     const rn = randomNumber(0, MAX_RANDOM_RECORDS);
@@ -50,7 +50,7 @@ const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'types
 
     // const item: GitFileInfo = {
     //   content: '',
-    //   ...config.DEFAULT_PATHS[language][0]
+    //   ...DEFAULT_PATHS[language][0]
     // };
     // for (let i = 0; i <= MAX_RANDOM_RECORDS; i++) {
     //   await dao.addOne(item, i.toString());
