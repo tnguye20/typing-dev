@@ -31,6 +31,11 @@
     color: salmon;
     padding: 2px;
 }
+#infoContainer .title.stat {
+    font-weight: bold;
+    color: teal;
+    padding: 2px;
+}
 
 #infoContainer a {
     text-decoration: none;

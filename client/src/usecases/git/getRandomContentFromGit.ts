@@ -7,7 +7,7 @@ import {
   randomNumber
 } from "../../utils";
 import { DefaultContentDao } from "../../daos/DefaultContentDao";
-const { DEFAULT_PATHS, MAX_RANDOM_RECORDS } = config;
+const { MAX_RANDOM_RECORDS } = config;
 
 const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'typescript', useDefaults: boolean = false) => {
   try {
@@ -48,6 +48,7 @@ const getRandomContentFromGit = async (language: keyof typeof LANGUAGES = 'types
       content
     };
 
+    // const { DEFAULT_PATHS } = config;
     // const item: GitFileInfo = {
     //   content: '',
     //   ...DEFAULT_PATHS[language][0]
