@@ -62,7 +62,7 @@ const config = {
   MAX_RANDOM_RECORDS: 100,
   CODE_SAMPLE_MAP,
   EXTENSION_MAP,
-  CHUNK: process.env.NODE_ENV === 'production' ? 11: 20,
+  CHUNK: process.env.NODE_ENV === 'production' ? 11: 5,
   DEFAULT_PATHS: {
     typescript: [
       {

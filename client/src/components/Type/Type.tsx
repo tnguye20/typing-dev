@@ -53,6 +53,9 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
   const spanList = React.useRef<Element[]>([]);
   const contentChunks = React.useRef<string[]>([]);
   const wrong = React.useRef<boolean>(false);
+  const [characterCount, setCharacterCount] = React.useState<number>(0);
+  const [wrongCount, setWrongCount] = React.useState<number>(0);
+
   const history = useHistory();
 
   const loadContent = async () => {
@@ -64,7 +67,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     }
     else {
       if (process.env.NODE_ENV === 'development') {
-        rs = await getRandomContentFromGit(language, true);
+        rs = await getRandomContentFromGit(language);
       }
       else {
         rs = await getRandomContentFromGit(language);
@@ -168,6 +171,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
   const handleType = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Backspace') {
       moveCursorBackward(currentIndex.current);
+      setCharacterCount(characterCount === 0 ? 0 : characterCount - 1);
     }
   }
   
@@ -180,6 +184,8 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     spanList.current[index].classList.add('isWrong');
     spanList.current[index].classList.remove('isNow');
     wrong.current = true;
+
+    setWrongCount(wrongCount + 1);
   }
 
   const handleOnChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -190,6 +196,8 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
         const character = event.target.value.slice(-1);
         // console.log(currentIndex.current, characterArray[currentIndex.current], character);
         if (characterArray[currentIndex.current] === character) {
+          setCharacterCount(characterCount + 1);
+
           if (currentIndex.current < spanList.current.length - 1) {
             moveCursorForward(currentIndex.current);
           }
@@ -311,7 +319,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
 
       {
         fileInfo.content.length > 0
-        ? <InfoDisplay fileInfo={fileInfo} />
+          ? <InfoDisplay fileInfo={fileInfo} characterCount={characterCount} totalCharacterCount={characterArray.length} wrongCount={wrongCount}/>
         : ''
       }
       
