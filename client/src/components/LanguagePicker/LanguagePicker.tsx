@@ -12,6 +12,7 @@ import { CardContent } from '@material-ui/core';
 import { CopyBlock, hopscotch } from "react-code-blocks";
 import { useHistory } from 'react-router-dom';
 import { TYPING } from '../../routes';
+import { Socials } from './Socials';
 
 const { CODE_SAMPLE_MAP } = config;
 
@@ -29,7 +30,7 @@ export const LanguagePicker: React.FC = () => {
     <Container maxWidth="lg" id='pickerContainer'>
       <div id='pickerCenter'>
         <Typography variant="h3" align='center'>Typing Dev</Typography>
-        {/* <Typography variant="h5" align='center'>Improve your typing skill with code</Typography> */}
+        <Socials />
         <br />
         <Typography variant="h6" align='center'>Select one of the languages below to start.</Typography>
         <br />

@@ -1,6 +1,7 @@
 
 body {
-    background-color: #0f1419;
+    /* background-color: #0f1419; */
+    background-color: black;
     overflow: hidden;
     /* padding-bottom: 150px; 
     padding-right: 150px;  */
@@ -41,7 +42,8 @@ textarea {
     border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 2.5px;
     color: #828c99;
-    font-family: 'Source Code Pro', monospace;
+    /* color: #828c99; */
+    font-family: 'Source Code Pro Medium', monospace;
     font-size: 16px;
     font-weight: 200;
     text-align: left;

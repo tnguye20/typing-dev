@@ -1,0 +1,13 @@
+#socialsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#socialsContainer a {
+    text-decoration: none;
+    color: gray;
+    display: flex;
+    padding: 7px;
+}
