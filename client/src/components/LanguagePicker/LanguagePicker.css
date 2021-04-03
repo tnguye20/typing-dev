@@ -30,6 +30,6 @@
 
 div[class$='_title'] span {
     font-style: oblique;
-    color: #3f51b5;
+    /* color: #3f51b5; */
     font-weight: bolder;
 }
