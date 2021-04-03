@@ -1,13 +1,13 @@
 import {
     auth,
     db,
-    storage,
-    firebase
+    firebase,
+    analytics
 } from './firebase';
 
 export {
     auth,
     db,
-    storage,
-    firebase
+    firebase,
+    analytics
 };
