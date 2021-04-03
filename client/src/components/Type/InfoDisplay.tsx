@@ -10,15 +10,15 @@ export const InfoDisplay: React.FC<{
 }> = ({ fileInfo, characterCount, totalCharacterCount, wrongCount }) => {
   const totalSeconds = React.useRef<number>(1);
   const totalMinutes = React.useRef<number>(1);
-  console.log('Character Count:', characterCount);
-  console.log('Wrong Count:', wrongCount);
+  // console.log('Character Count:', characterCount);
+  // console.log('Wrong Count:', wrongCount);
 
   React.useEffect(() => {
     const secondInterval = setInterval(() => { totalSeconds.current += 1 }, 1000);
     const minuteInterval = setInterval(() => { totalMinutes.current += 1 }, 60000);
 
     return () => {
-      console.log('Unmount the Info');
+      // console.log('Unmount the Info');
       clearInterval(secondInterval);
       clearInterval(minuteInterval);
     }

@@ -1,13 +1,13 @@
-# Type Dev
+# Typing Dev
 A <a href="https://type-dev-5e193.web.app/" target="_blank">Typing Practice</a>
  Web App built entirely in React
 <br />
 <br />
 
 # Motivation
-Typical typing softwares utilize generic passages to construct their lessons. Although one can improve using such contents, programmers may find it less effective due to the nature of the phrases and characters that they use (ex: all the brackets and those annoying semicolons)  
+Typical typing softwares utilize generic passages to construct their lessons. Although one can improve using such contents, programmers may find it less effective due to the nature of the phrases and characters that they use in their day-to-day (ex: all the brackets and those annoying semicolons).   
  
-Type-Dev is designed to solve that problem, by pulling in quality code across Github and put them at your fingertips. The process is completely random, and is designed to efficiently get the files that match the language you indicate.
+Typing Dev is designed to solve that problem, by pulling in quality code across Github and put them at your fingertips. The process is designed to efficiently get the files that match the language you indicate.
 <br />
 <br />
 

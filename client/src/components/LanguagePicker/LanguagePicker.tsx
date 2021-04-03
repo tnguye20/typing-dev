@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import { LANGUAGES } from '../../interfaces';
 import { config } from '../../shared';
+import { analytics } from '../../libs';
 import './LanguagePicker.css';
 import { CardContent } from '@material-ui/core';
 import { CopyBlock, hopscotch } from "react-code-blocks";
@@ -17,10 +18,19 @@ const { CODE_SAMPLE_MAP } = config;
 export const LanguagePicker: React.FC = () => {
   const history = useHistory();
 
+  const handleOnClick = (language: string) => {
+    history.push(`${TYPING}/${language}`);
+    analytics.logEvent('start_typing', {
+      language
+    });
+  }
+
   return (
     <Container maxWidth="lg" id='pickerContainer'>
       <div id='pickerCenter'>
-        <Typography variant="h3" align='center'>Type Dev</Typography>
+        <Typography variant="h3" align='center'>Typing Dev</Typography>
+        {/* <Typography variant="h5" align='center'>Improve your typing skill with code</Typography> */}
+        <br />
         <Typography variant="h6" align='center'>Select one of the languages below to start.</Typography>
         <br />
         <Grid container spacing={1} direction="row">
@@ -29,7 +39,7 @@ export const LanguagePicker: React.FC = () => {
               const language = l as keyof typeof LANGUAGES;
               return (
                 <Grid key={index} item md={6} sm={12} xs={12}>
-                  <Card onClick={() => history.push(`${TYPING}/${language}`) }>
+                  <Card onClick={() => handleOnClick(language)}>
                     <CardHeader
                       title={language.toUpperCase()}
                       className={`${language}_title`}
