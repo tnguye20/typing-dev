@@ -3,7 +3,7 @@
     height: 100vh;
     position: relative;
     overflow: hidden scroll;
-    scrollbar-width: none;  /* Firefox */
+    scrollbar-width: none;
 }
 #pickerContainer::-webkit-scrollbar {
   display: none;
