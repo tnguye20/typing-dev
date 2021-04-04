@@ -1,9 +1,13 @@
 import { Type } from './Type';
 import { LanguagePicker } from './LanguagePicker';
 import { Header } from './Header';
+import { Login } from './Login';
+import { Logout } from './Logout';
 
 export {
   Type,
   LanguagePicker,
-  Header
+  Header,
+  Login,
+  Logout
 };

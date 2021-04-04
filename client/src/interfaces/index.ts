@@ -39,3 +39,47 @@ export interface GitFileInfo {
   path: string
   content: string
 }
+
+export interface FormValues {
+  email?: string,
+  password?: string,
+  verifyPassword?: string,
+  name?: string,
+}
+export interface IUser {
+  uid?: string,
+  name: string,
+  email: string,
+  wpm: number[],
+  cpm: number[],
+  acc: number
+}
+export class User implements IUser {
+  uid: string | undefined;
+  name: string;
+  email: string;
+  wpm: number[];
+  cpm: number[];
+  acc: number;
+
+  constructor(email: string, name: string, uid?: string | undefined) {
+    this.name = name;
+    this.email = email;
+    this.wpm = [];
+    this.cpm = [];
+    this.acc = 100
+    this.uid = uid ? uid : undefined;
+  }
+}
+
+export interface IAuthToken {
+    uid: string | null,
+    idToken: string | null
+}
+
+export class AuthToken implements IAuthToken {
+    constructor(public uid: string | null, public idToken: string | null) {
+        this.uid = uid;
+        this.idToken = idToken;
+    }
+}
