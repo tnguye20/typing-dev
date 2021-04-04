@@ -38,7 +38,7 @@ function App() {
               })
             }
             <Route exacr path={ROUTES.TYPING} render={() => <><Header /><Type language='javascript'/></>}/>
-            <Route path={ROUTES.LOGIN} render={() => <Login />}/>
+            <Route path={ROUTES.LOGIN} render={() =><><Header /><Login /></>}/>
             <Route path={ROUTES.LOGOUT} render={() => <Logout />}/>
             <Route path={ROUTES.DASHBOARD} render={() => <><Header /><UserDashBoard /></>}/>
             <Route path={ROUTES.ROOT} render={() => <LanguagePicker />}/>
