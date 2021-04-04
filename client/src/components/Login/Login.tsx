@@ -12,12 +12,12 @@ import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import { useHistory } from 'react-router-dom';
-import * as ROUTES from '../../routes';
 import { auth } from '../../libs';
 import { UserDao } from '../../daos';
 import './Login.css';
 import { AuthToken, FormValues, User } from "../../interfaces";
 import { useAuthValue, useUserValue } from '../../contexts';
+import { Socials } from "../LanguagePicker/Socials";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -34,7 +34,7 @@ export const Login = () => {
   const history = useHistory();
 
   useEffect(() => {
-    if (user) history.push(ROUTES.ROOT);
+    if (user) history.goBack();
   }, [user, history]);
 
   const handleFormChange: React.ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement> | undefined = (e) => {
@@ -61,7 +61,7 @@ export const Login = () => {
 
           const authToken = new AuthToken(user.uid, idToken);
           setAuthUser!(authToken);
-          history.push(ROUTES.ROOT);
+          history.goBack();
         }
       }
       else throw new Error('Failed to register new user. Please try again!');
@@ -83,7 +83,7 @@ export const Login = () => {
           const authToken = new AuthToken(user.uid, idToken);
 
           setAuthUser!(authToken);
-          history.push(ROUTES.ROOT);
+          history.goBack();
         }
       }
       else throw new Error('Failed to log in. Please try again!');
@@ -95,7 +95,9 @@ export const Login = () => {
 
   return (
     <>
-      <Container>
+      <Container id='loginContainer'>
+        <Typography variant="h3" align='center'>Typing Dev</Typography>
+        <Socials />
         <Grid container>
           <Grid item xs={12} sm={6}>
             <div className="Login">

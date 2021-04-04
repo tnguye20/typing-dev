@@ -47,4 +47,13 @@ export class UserDao implements IDao<User> {
     }
   }
 
+  async updateOne(uid: string, data: Record<string, any>) {
+    if (!this.userRef) {
+      this.userRef = this.ref.doc(uid);
+    }
+    this.userRef.update({ ...data });
+  }
+  async update(data: Record<string, any>) {
+    this.userRef.update({ ...data });
+  }
 }

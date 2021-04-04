@@ -20,7 +20,6 @@ const useAuth = () => {
     }
     
     useEffect(() => {
-        console.log('me cally');
         const loadToken = async () => {
             if (auth.currentUser) {
                 const idToken = await auth.currentUser.getIdToken(true);

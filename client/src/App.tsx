@@ -16,7 +16,8 @@ import {
   LanguagePicker,
   Header,
   Login,
-  Logout
+  Logout,
+  UserDashBoard
 } from './components';
 import { LANGUAGES } from './interfaces';
 
@@ -39,6 +40,7 @@ function App() {
             <Route exacr path={ROUTES.TYPING} render={() => <><Header /><Type language='javascript'/></>}/>
             <Route path={ROUTES.LOGIN} render={() => <Login />}/>
             <Route path={ROUTES.LOGOUT} render={() => <Logout />}/>
+            <Route path={ROUTES.DASHBOARD} render={() => <><Header /><UserDashBoard /></>}/>
             <Route path={ROUTES.ROOT} render={() => <LanguagePicker />}/>
           </Switch>
         </Router>

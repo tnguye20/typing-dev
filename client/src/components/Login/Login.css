@@ -1,10 +1,17 @@
+#loginContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .Login {
   display: flex;
   flex: 1;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 50vh;
   text-align: center;
 }
 
@@ -22,6 +29,7 @@
   width: 36%;
   height: 75%;
   min-width: 260px;
+  width: 80%;
   max-width: 500px;
   max-height: 525px;
   justify-content: space-evenly;

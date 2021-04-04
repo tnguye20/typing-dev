@@ -52,7 +52,8 @@ export interface IUser {
   email: string,
   wpm: number[],
   cpm: number[],
-  acc: number
+  acc: number[],
+  tests: number
 }
 export class User implements IUser {
   uid: string | undefined;
@@ -60,14 +61,16 @@ export class User implements IUser {
   email: string;
   wpm: number[];
   cpm: number[];
-  acc: number;
+  acc: number[];
+  tests: number;
 
   constructor(email: string, name: string, uid?: string | undefined) {
     this.name = name;
     this.email = email;
     this.wpm = [];
     this.cpm = [];
-    this.acc = 100
+    this.acc = [100];
+    this.tests = 0;
     this.uid = uid ? uid : undefined;
   }
 }
