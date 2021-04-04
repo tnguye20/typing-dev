@@ -86,3 +86,10 @@ export class AuthToken implements IAuthToken {
         this.idToken = idToken;
     }
 }
+
+export enum ALERT_TYPE {
+  success = 'success', 
+  info = 'info', 
+  warning = 'warning', 
+  error = 'error', 
+}

@@ -15,9 +15,11 @@ import { useHistory } from 'react-router-dom';
 import { auth } from '../../libs';
 import { UserDao } from '../../daos';
 import './Login.css';
-import { AuthToken, FormValues, User } from "../../interfaces";
+import { ALERT_TYPE, AuthToken, FormValues, User } from "../../interfaces";
 import { useAuthValue, useUserValue } from '../../contexts';
 import { Socials } from "../LanguagePicker/Socials";
+import { CustomizedAlert } from '../CustomizedAlert';
+import { useAlert } from '../../hooks';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -32,6 +34,7 @@ export const Login = () => {
   const { setAuthUser } = useAuthValue();
   const { user } = useUserValue();
   const history = useHistory();
+const { openAlert, setOpenAlert, alertMessage, alertType, fireAlert} = useAlert();
 
   useEffect(() => {
     if (user) history.goBack();
@@ -47,7 +50,11 @@ export const Login = () => {
   const handleRegister = async () => {
     const { email, name, password, verifyPassword } = values;
     try {
-      if (email && name && password && (password === verifyPassword)) {
+      if (email && name && password) {
+        if (password !== verifyPassword) {
+          fireAlert('Password mismatched. Please try again.', ALERT_TYPE.error);
+          return;
+        }
         const { user } = await auth.createUserWithEmailAndPassword(email, password);
         if (user) {
           const idToken = await user.getIdToken();
@@ -64,9 +71,11 @@ export const Login = () => {
           history.goBack();
         }
       }
-      else throw new Error('Failed to register new user. Please try again!');
     }
     catch (error) {
+      if (error.code) {
+        fireAlert(error.message, ALERT_TYPE.error);
+      }
       console.log(error);
     }
   }
@@ -86,9 +95,11 @@ export const Login = () => {
           history.goBack();
         }
       }
-      else throw new Error('Failed to log in. Please try again!');
     }
     catch (error) {
+      if (error.code) {
+        fireAlert(error.message, ALERT_TYPE.error);
+      }
       console.log(error);
     }
   }
@@ -146,6 +157,7 @@ export const Login = () => {
                   color="default"
                   className={classes.button}
                   onClick={handleLogin}
+                  disabled={!values.email || !values.password}
                 >
                   Sign in
                 </Button>
@@ -237,6 +249,7 @@ export const Login = () => {
                   color="default"
                   className={classes.button}
                   onClick={handleRegister}
+                  disabled={!values.email || !values.password || !values.password || !values.verifyPassword}
                 >
                   Register
                 </Button>
@@ -245,6 +258,7 @@ export const Login = () => {
           </Grid>
         </Grid>
       </Container>
+      <CustomizedAlert duration={5000} openAlert={openAlert} setOpenAlert={setOpenAlert} alertMessage={alertMessage} alertType={alertType}/>
     </>
   )
 }
