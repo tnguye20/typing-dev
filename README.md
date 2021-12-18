@@ -1,5 +1,5 @@
 # Typing Dev
-A <a href="https://type-dev-5e193.web.app/" target="_blank">Typing Practice</a>
+A <a href="https://typing-dev.web.app" target="_blank">Typing Practice</a>
  Web App built entirely in React
 <br />
 <br />
