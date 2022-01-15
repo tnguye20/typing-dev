@@ -1,29 +1,16 @@
 import * as React from 'react';
 import { GitFileInfo } from '../../interfaces';
 import './InfoDisplay.css';
+import { Socials } from '../LanguagePicker/Socials';
 
 export const InfoDisplay: React.FC<{
+  chunks: number,
   fileInfo: GitFileInfo,
-  totalCharacterCount: number,
-  characterCount: number,
-  wrongCount: number
-}> = ({ fileInfo, characterCount, totalCharacterCount, wrongCount }) => {
-  const totalSeconds = React.useRef<number>(1);
-  const totalMinutes = React.useRef<number>(1);
-  // console.log('Character Count:', characterCount);
-  // console.log('Wrong Count:', wrongCount);
-
-  React.useEffect(() => {
-    const secondInterval = setInterval(() => { totalSeconds.current += 1 }, 1000);
-    const minuteInterval = setInterval(() => { totalMinutes.current += 1 }, 60000);
-
-    return () => {
-      // console.log('Unmount the Info');
-      clearInterval(secondInterval);
-      clearInterval(minuteInterval);
-    }
-  }, []);
-  
+  round: number
+  cpm: number,
+  acc: number,
+  wpm: number
+}> = ({ chunks, fileInfo, cpm, acc, wpm, round }) => {
   return (
     <div id='infoContainer'>
       <div>
@@ -46,24 +33,29 @@ export const InfoDisplay: React.FC<{
 
       <div>
         <div>
+          <div className='title stat'>Test:&nbsp;</div>
+          <div>{round}</div>
+        </div>
+        <div>
+          <div className='title stat'>Parts:&nbsp;</div>
+          <div>{chunks}</div>
+        </div>
+        <div>
           <div className='title stat'>WPM:&nbsp;</div>
-          <div>{Math.floor((characterCount / 5) / totalMinutes.current)}</div>
+          <div>{wpm}</div>
         </div>
         <div>
           <div className='title stat'>CPM:&nbsp;</div>
-          <div>{Math.floor(characterCount / totalMinutes.current)}</div>
+          <div>{cpm}</div>
         </div>
         <div>
           <div className='title stat'>ACC:&nbsp;</div>
           <div>
-            {
-              (characterCount > 0)
-              ? Math.round((characterCount - wrongCount) / characterCount * 100)
-              : 100
-            }%
+            {acc}%
           </div>
         </div>
       </div>
+      <Socials />
     </div>
   );
 }

@@ -8,6 +8,9 @@ import { GitFileInfo, LANGUAGES } from '../../interfaces';
 import * as ROUTES from '../../routes';
 import { useHistory } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
+import { useUserValue } from '../../contexts';
+import { UserDao } from '../../daos';
+import { getACC, getCPM, getWPM } from '../../utils';
 
 const verifyComment = (line: string) => {
   const leftTrimmed = line.trimLeft();
@@ -45,6 +48,7 @@ const defaultInfo = {
 };
 
 export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language }) => {
+  const [round, setRound] = React.useState<number>(0);
   const [fileInfo, setFileInfo] = React.useState<GitFileInfo>(defaultInfo);
   const [characterArray, setCharacterArray] = React.useState<string[]>([]);
   const currentIndex = React.useRef<number>(0);
@@ -56,6 +60,10 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
   const [characterCount, setCharacterCount] = React.useState<number>(0);
   const [wrongCount, setWrongCount] = React.useState<number>(0);
 
+  const { user } = useUserValue();
+  const totalSeconds = React.useRef<number>(1);
+  const totalMinutes = React.useRef<number>(1);
+
   const history = useHistory();
 
   const loadContent = async () => {
@@ -66,6 +74,27 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
       content = contentChunks.current.shift()!;
     }
     else {
+      // Update then Reset statistics
+      if (user) {
+        const cpm = getCPM(characterCount, totalMinutes.current);
+        const wpm = getWPM(characterCount, totalMinutes.current);
+        const acc = getACC(characterCount, wrongCount)
+        const dao = new UserDao(user.uid);
+        if (cpm > 0 && wpm > 0) {
+          const currentData = await dao.get();
+          await dao.update({
+            cpm: [...currentData.cpm, cpm],
+            wpm: [...currentData.wpm, wpm],
+            acc: [...currentData.acc, acc],
+            tests: currentData.tests + round
+          });
+        }
+      }
+
+      setRound(round + 1);
+      setCharacterCount(0);
+      setWrongCount(0);
+
       if (process.env.NODE_ENV === 'development') {
         rs = await getRandomContentFromGit(language);
       }
@@ -79,8 +108,6 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
       contentChunks.current = chunks;
       content = contentChunks.current.shift()!;
     }
-
-    
     const formatted = formatContent(content);
     let info;
     if (rs) {
@@ -95,6 +122,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     setCharacterArray(formatted);
     spanList.current = Array.from(document.querySelectorAll('#typeZone span:not(.caret):not(.comment)'));
   }
+
   const reset = () => {
     currentIndex.current = 0;
     textAreaRef.current!.value = '';
@@ -121,6 +149,7 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     //eslint-disable-next-line
   }, []);
 
+  // useEffect for content
   React.useEffect(() => {
     const getContent = async () => {
       await loadContent();
@@ -132,6 +161,17 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
     return () => document.removeEventListener('keydown', foccusCallBack);
     //eslint-disable-next-line
   }, []);
+
+  // useEffect for round
+  React.useEffect(() => {
+    const secondInterval = setInterval(() => { totalSeconds.current += 1 }, 1000);
+    const minuteInterval = setInterval(() => { totalMinutes.current += 1 }, 60000);
+
+    return () => {
+      clearInterval(secondInterval);
+      clearInterval(minuteInterval);
+    }
+  }, [round]);
 
   const moveCursorForward = (index: number) => {
     if (wrong.current) {
@@ -240,6 +280,8 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
         }
       }
       else {
+        console.log('End of text');
+
         // Get New Content to type
         reset();
         await loadContent();
@@ -319,7 +361,14 @@ export const Type: React.FC<{language: keyof typeof LANGUAGES}> = ({ language })
 
       {
         fileInfo.content.length > 0
-          ? <InfoDisplay fileInfo={fileInfo} characterCount={characterCount} totalCharacterCount={characterArray.length} wrongCount={wrongCount}/>
+          ? <InfoDisplay
+            chunks={contentChunks.current.length}
+            fileInfo={fileInfo}
+            cpm={getCPM(characterCount, totalMinutes.current)}
+            wpm={getWPM(characterCount, totalMinutes.current)}
+            acc={getACC(characterCount, wrongCount)}
+            round={round}
+          />
         : ''
       }
       

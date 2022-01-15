@@ -7,7 +7,7 @@
 
 #socialsContainer a {
     text-decoration: none;
-    color: gray;
+    color: gray !important;
     display: flex;
     padding: 7px;
 }

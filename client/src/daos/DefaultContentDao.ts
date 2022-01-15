@@ -29,7 +29,7 @@ export class DefaultContentDao implements IDao<GitFileInfo> {
     throw new Error('Invalid ID');
   }
 
-  async addOne(content: GitFileInfo, id: string | null) {
+  async addOne(content: GitFileInfo, id: string | undefined) {
     if (!this.languageRef) {
       throw new Error('No language set to query');
     }

@@ -7,6 +7,9 @@ import randomNumber from './randomNumber';
 import contentToChunks from './contentToChunks.utils';
 import sendPOST from './sendPOST';
 import sendGET from './sendGET';
+import getACC from './getACC';
+import getCPM from './getCPM';
+import getWPM from './getWPM';
 
 export {
   getRandomRepositoryByLanguage,
@@ -15,5 +18,8 @@ export {
   sendPOST,
   randomNumber,
   sendGET,
-  contentToChunks
+  contentToChunks,
+  getACC,
+  getCPM,
+  getWPM
 };
